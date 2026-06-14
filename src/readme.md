@@ -1,664 +1,648 @@
 
-좋습니다. 기존 예제는 실제 실행 시 다음과 같은 문제가 있습니다.
 
-* `User`, `CulturalStory` 모델 import 누락
-* Blueprint 등록 누락
-* SQLite Date 타입 변환 오류 가능
-* `calculate_month_age()` 예외 처리 없음
-* API 응답 표준화 없음
-* 초기 데이터 생성 없음
-* 문화포털 API 예외 처리 없음
-* Flask-SQLAlchemy 설정 누락
-* CORS 미지원
-* 모바일 앱 연동용 REST API 구조 미흡
+# 모바일 앱 서비스 기획서
 
-아래는 **실행 가능한 단일 app.py 통합본(MVP v1)** 입니다.
+# 모아(Mother-All)
 
-필수 패키지
+### 문화데이터 기반 AI 육아·문화 통합 플랫폼
 
-```bash
-pip install flask flask_sqlalchemy flask_cors requests
+---
+
+# 1. 프로젝트 개요
+
+## 1.1 서비스명
+
+**모아(Mother-All)**
+
+> "모든 엄마를 위한 한국 문화 육아 네비게이터"
+
+---
+
+## 1.2 서비스 비전
+
+다문화 가정 및 이주여성이 한국의 육아 문화와 사회 시스템을 자연스럽게 이해하고 적응할 수 있도록 지원하는 AI 기반 문화육아 플랫폼
+
+---
+
+## 1.3 서비스 미션
+
+### 문화 데이터로 육아의 장벽을 낮추고,
+
+### AI로 문화적 고립을 해소하며,
+
+### 데이터로 사회적 통합을 실현한다.
+
+---
+
+# 2. 문제 정의 (Pain Point)
+
+## 2.1 사회적 문제
+
+### 초저출산 + 다문화가구 증가
+
+현재 한국은:
+
+* 출산율 세계 최저 수준
+* 다문화 출생아 비율 지속 증가
+* 외국인 부모 증가
+* 국제결혼 가구 증가
+
+그러나 육아지원 시스템은 여전히 한국인 중심으로 설계되어 있음
+
+---
+
+## 2.2 사용자 Pain Point
+
+### 페르소나
+
+#### Nguyen Thi Lan (29세)
+
+* 베트남 출신
+* 한국 거주 2년차
+* 6개월 아기 육아 중
+* 한국어 초급
+
+---
+
+### Pain Point 1
+
+#### "백일이 뭔가요?"
+
+한국 시댁:
+
+> "곧 백일인데 준비해야지"
+
+이주여성:
+
+> "왜 하는 거지?"
+
+문제
+
+* 의미를 모름
+* 준비방법 모름
+* 비용 부담
+* 가족 갈등 발생
+
+---
+
+### Pain Point 2
+
+#### 육아 지원 정보 분산
+
+찾아야 하는 사이트
+
+* 문화포털
+* 가족센터
+* 보건소
+* 육아종합지원센터
+* 주민센터
+
+문제
+
+* 정보 탐색 시간 과다
+* 언어 장벽
+* 신청 누락
+
+---
+
+### Pain Point 3
+
+#### 문화적 고립
+
+* 한국 엄마 커뮤니티 진입 어려움
+* 지역 행사 정보 부족
+* 사회적 관계 형성 실패
+
+결과
+
+* 우울감 증가
+* 육아 스트레스 증가
+* 사회적 고립 심화
+
+---
+
+# 3. 서비스 제안
+
+## 서비스 컨셉
+
+### AI 기반 문화육아 타임라인 플랫폼
+
+출생일부터 36개월까지
+
+아이 성장 과정에 맞춰
+
+문화 데이터 + 육아 데이터 + 행정 데이터
+
+를 자동 융합하여 제공
+
+---
+
+## 핵심 슬로건
+
+### "아이가 자라는 순간마다 한국 문화를 함께 알려주는 AI 육아 친구"
+
+---
+
+# 4. 문화데이터 중심 서비스 구조
+
+## 핵심 차별화 포인트
+
+기존 육아앱
+
+* 건강 중심
+* 쇼핑 중심
+* 커뮤니티 중심
+
+모아
+
+### 문화데이터 중심
+
+---
+
+# 5. 데이터 활용 설계
+
+## 문화데이터 활용 비중 60%
+
+### 데이터 자산 구성
+
+| 구분       | 데이터                   | 비중  |
+| -------- | --------------------- | --- |
+| 문화데이터    | 전래동화, 자장가, 일생의례, 문화행사 | 60% |
+| 육아데이터    | 발달정보, 예방접종            | 20% |
+| 지원데이터    | 장난감도서관, 가족센터          | 10% |
+| AI 분석데이터 | 행동패턴 분석               | 10% |
+
+---
+
+# 6. 공공데이터 활용 방안
+
+## ① 전통 육아 문화 데이터
+
+활용 데이터
+
+* 백일
+* 돌잔치
+* 첫돌
+* 삼칠일
+* 명절 문화
+* 태교 문화
+
+서비스
+
+### 문화 캘린더
+
+예시
+
+아기 100일 전
+
+푸시
+
+> "다음주 백일입니다"
+
+AI 설명
+
+> "백일은 아이의 건강한 성장을 기원하는 한국 전통 문화입니다"
+
+---
+
+## ② 전래동화 데이터
+
+활용기관
+
+* 국립민속박물관
+* 문화포털
+
+서비스
+
+### AI 스토리 큐레이션
+
+예시
+
+6개월
+
+→ 수면 동화 추천
+
+12개월
+
+→ 감성 발달 동화 추천
+
+24개월
+
+→ 언어 발달 동화 추천
+
+---
+
+## ③ 전통 자장가 음원
+
+서비스
+
+### AI 문화 수면 케어
+
+추천 예시
+
+* 자장자장 우리아기
+* 섬집아기
+* 둥개둥개 둥개야
+
+다국어 해설 제공
+
+---
+
+## ④ 지역 문화행사 데이터
+
+서비스
+
+### 우리동네 문화체험
+
+추천 예시
+
+* 전통놀이 체험
+* 국악 공연
+* 어린이 박물관
+* 가족 문화축제
+
+---
+
+## ⑤ 다문화 프로그램 데이터
+
+서비스
+
+### AI 멘토 매칭
+
+추천
+
+* 동일 국적 선배 엄마
+* 지역 멘토
+* 육아 전문가
+
+---
+
+# 7. 모바일 앱 기능 설계
+
+---
+
+## Feature 1
+
+# AI 육아 타임라인
+
+### 메인 화면
+
+오늘의 육아
+
+* 예방접종 D-3
+* 이유식 시작 D+5
+* 백일 D-20
+
+오늘의 문화
+
+* 전래동화 추천
+* 자장가 추천
+* 가족 체험 추천
+
+---
+
+## Feature 2
+
+# K-Culture 육아 가이드
+
+### AI 문화 번역
+
+예시
+
+사용자 질문
+
+> "돌잔치는 왜 하나요?"
+
+AI 답변
+
+* 역사
+* 의미
+* 준비물
+* 예산
+* 체크리스트
+
+제공
+
+---
+
+## Feature 3
+
+# 문화 AR 체험
+
+기능
+
+AR 카메라
+
+아이 얼굴 인식
+
+제공
+
+* 한복 체험
+* 돌잡이 체험
+* 전통놀이 체험
+
+SNS 공유 가능
+
+---
+
+## Feature 4
+
+# 문화 성장 앨범
+
+자동 생성
+
+예시
+
+100일
+
+↓
+
+백일 스토리 카드 생성
+
+↓
+
+사진 저장
+
+↓
+
+문화 설명 기록
+
+---
+
+## Feature 5
+
+# AI 서류 작성 도우미
+
+지원
+
+* 가족센터 신청서
+* 문화체험 신청서
+* 육아지원 신청서
+
+자동 입력
+
+다국어 번역 제공
+
+---
+
+## Feature 6
+
+# AI 음성 문화 상담사
+
+지원 언어
+
+* 한국어
+* 영어
+* 중국어
+* 베트남어
+* 태국어
+* 일본어
+
+예시
+
+"백일상 어떻게 준비하나요?"
+
+즉시 답변
+
+---
+
+# 8. 사용자 플로우
+
+## STEP 1
+
+회원가입
+
+입력
+
+* 국적
+* 언어
+* 자녀 생년월일
+* 지역
+
+---
+
+## STEP 2
+
+AI 문화 프로파일 생성
+
+분석
+
+* 문화권
+* 언어 수준
+* 육아 단계
+
+---
+
+## STEP 3
+
+초개인화 타임라인 생성
+
+자동 추천
+
+* 문화행사
+* 육아정보
+* 멘토링
+* 서류안내
+
+---
+
+## STEP 4
+
+실시간 푸시
+
+예시
+
+> "아기의 첫 명절입니다"
+
+> "추석 문화 체험 행사가 열립니다"
+
+---
+
+# 9. AI 추천 엔진 설계
+
+## AI 엔진명
+
+### Culture Parenting Graph Engine
+
+---
+
+### 분석 요소
+
+```text
+국적
++
+거주지역
++
+자녀 월령
++
+문화 관심도
++
+참여 기록
++
+행정서비스 이용기록
+```
+
+↓
+
+```text
+문화 적응도 점수
+육아 스트레스 점수
+문화 참여 점수
+```
+
+↓
+
+```text
+맞춤 추천 생성
 ```
 
 ---
 
-from flask import Flask, jsonify, request
+# 10. 수익모델(BM)
 
-from flask_sqlalchemy import SQLAlchemy
+## B2G
 
-from flask_cors import CORS
+### SaaS 플랫폼 공급
 
-from datetime import datetime, date
+대상
 
-import requests
+* 여성가족부
+* 지방자치단체
+* 가족센터
+* 육아종합지원센터
 
-# --------------------------------------------------
+수익
 
-# Flask Config
+연간 라이선스
 
-# --------------------------------------------------
+기관당
 
-app = Flask(**name**)
+3,000만 ~ 1억원
 
-CORS(app)
+---
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///motherall.db"
+## B2B
 
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+### 문화 육아 데이터 API
 
-db = SQLAlchemy(app)
+제공
 
-# --------------------------------------------------
+* 출산용품 기업
+* 유아교육 기업
+* 키즈 콘텐츠 기업
 
-# Models
+수익
 
-# --------------------------------------------------
+API 구독료
 
-class User(db.Model):
+월 100만원 ~ 1,000만원
 
-```
-__tablename__ = "users"
+---
 
-id = db.Column(db.Integer, primary_key=True)
+## B2C
 
-name = db.Column(db.String(100))
+### 프리미엄 구독
 
-nationality = db.Column(db.String(50))
+월 4,900원
 
-language = db.Column(db.String(20))
+제공
 
-baby_name = db.Column(db.String(100))
+* AI 육아코치
+* 문화 교육 패키지
+* 성장앨범 자동제작
 
-baby_birth = db.Column(db.Date)
+---
 
-created_at = db.Column(
+## 커머스
 
-    db.DateTime,
+추천
 
-    default=datetime.utcnow
+* 한복
+* 돌상
+* 전통놀이 키트
+* 전래동화 굿즈
 
-)
-```
+수수료
 
-class CulturalStory(db.Model):
+5~15%
 
-```
-__tablename__ = "cultural_stories"
+---
 
-id = db.Column(db.Integer, primary_key=True)
+# 11. 기술 아키텍처
 
-title = db.Column(db.String(200))
+```text
+공공 문화데이터
+        │
+        ▼
+데이터 수집 플랫폼
+        │
+        ▼
+문화 데이터 레이크
+        │
+        ▼
+AI 추천 엔진
+        │
+ ┌──────┼──────┐
+ ▼      ▼      ▼
 
-category = db.Column(db.String(100))
+타임라인  문화추천  서류도우미
 
-age_group = db.Column(db.String(50))
+ └──────┼──────┘
+        ▼
 
-description = db.Column(db.Text)
-
-image_url = db.Column(db.Text)
-```
-
-class Lullaby(db.Model):
-
-```
-__tablename__ = "lullabies"
-
-id = db.Column(db.Integer, primary_key=True)
-
-title = db.Column(db.String(200))
-
-description = db.Column(db.Text)
-
-audio_url = db.Column(db.Text)
-
-age_group = db.Column(db.String(50))
-```
-
-# --------------------------------------------------
-
-# Utility Functions
-
-# --------------------------------------------------
-
-def calculate_month_age(birth_date):
-
-```
-if not birth_date:
-
-    return 0
-
-today = date.today()
-
-months = (
-
-    (today.year - birth_date.year) * 12 +
-
-    today.month - birth_date.month
-
-)
-
-return max(months, 0)
+ 모바일 앱
 ```
 
-def recommend_story(age):
+---
 
-```
-if age <= 6:
+# 12. 차별화 전략
 
-    return "까치와 호랑이"
+| 항목          | 일반 육아앱 | 모아 |
+| ----------- | ------ | -- |
+| 육아 정보       | O      | O  |
+| 예방접종        | O      | O  |
+| 문화 데이터      | X      | ◎  |
+| 전래동화 추천     | X      | ◎  |
+| 백일·돌 문화 가이드 | X      | ◎  |
+| 다국어 문화 의역   | X      | ◎  |
+| 다문화 멘토링     | △      | ◎  |
+| AI 문화 상담    | X      | ◎  |
 
-elif age <= 12:
+---
 
-    return "흥부와 놀부"
+# 13. ESG 및 공공성 가치
 
-elif age <= 24:
+### Social
 
-    return "해님달님"
+* 다문화 가정 정착 지원
+* 육아 스트레스 감소
+* 문화격차 해소
 
-else:
+### Governance
 
-    return "선녀와 나무꾼"
-```
+* 공공데이터 활용
+* 정책 연계 플랫폼
 
-def get_cultural_milestone(age):
+### Impact
 
-```
-events = []
+* 사회통합 촉진
+* 출산 친화 환경 조성
+* 문화 접근성 확대
 
+---
 
+# 14. 최종 제안 요약
 
-if age == 3:
+**모아(Mother-All)**는 단순한 육아 앱이 아니라, 대한민국의 방대한 문화데이터를 핵심 자산으로 활용하여 다문화 가정이 한국 사회에 자연스럽게 적응하도록 돕는 **AI 기반 문화육아 슈퍼앱**이다.
 
-    events.append({
+핵심 경쟁력은 다음 4가지이다.
 
-        "event": "백일",
+1. **문화데이터 중심의 육아 서비스**
+2. **출생~36개월 생애주기 AI 타임라인**
+3. **다국어 문화 의역 AI**
+4. **공공데이터 융합 기반 B2G 확장성**
 
-        "description": "아기의 건강한 성장을 기원하는 한국 전통 문화"
-
-    })
-
-
-
-if age == 12:
-
-    events.append({
-
-        "event": "돌잔치",
-
-        "description": "아기의 첫 생일을 축하하는 전통 행사"
-
-    })
-
-
-
-return events
-```
-
-# --------------------------------------------------
-
-# Home
-
-# --------------------------------------------------
-
-@app.route("/")
-
-def home():
-
-```
-return jsonify({
-
-    "service": "Mother-All",
-
-    "version": "1.0",
-
-    "status": "running"
-
-})
-```
-
-# --------------------------------------------------
-
-# User Registration
-
-# --------------------------------------------------
-
-@app.route("/api/users", methods=["POST"])
-
-def create_user():
-
-```
-data = request.json
-
-
-
-try:
-
-    birth_date = datetime.strptime(
-
-        data["baby_birth"],
-
-        "%Y-%m-%d"
-
-    ).date()
-
-
-
-    user = User(
-
-        name=data["name"],
-
-        nationality=data["nationality"],
-
-        language=data["language"],
-
-        baby_name=data["baby_name"],
-
-        baby_birth=birth_date
-
-    )
-
-
-
-    db.session.add(user)
-
-    db.session.commit()
-
-
-
-    return jsonify({
-
-        "success": True,
-
-        "user_id": user.id
-
-    })
-
-
-
-except Exception as e:
-
-    return jsonify({
-
-        "success": False,
-
-        "error": str(e)
-
-    }), 400
-```
-
-# --------------------------------------------------
-
-# Timeline API
-
-# --------------------------------------------------
-
-@app.route("/api/timeline/[int:user_id](int:user_id)")
-
-def timeline(user_id):
-
-```
-user = User.query.get(user_id)
-
-
-
-if not user:
-
-    return jsonify({
-
-        "success": False,
-
-        "message": "User not found"
-
-    }), 404
-
-
-
-age = calculate_month_age(user.baby_birth)
-
-
-
-return jsonify({
-
-    "success": True,
-
-    "baby_age_month": age,
-
-    "timeline": get_cultural_milestone(age)
-
-})
-```
-
-# --------------------------------------------------
-
-# Story Recommendation
-
-# --------------------------------------------------
-
-@app.route("/api/story/[int:user_id](int:user_id)")
-
-def story_recommendation(user_id):
-
-```
-user = User.query.get(user_id)
-
-
-
-if not user:
-
-    return jsonify({
-
-        "success": False
-
-    }), 404
-
-
-
-age = calculate_month_age(user.baby_birth)
-
-
-
-story_title = recommend_story(age)
-
-
-
-story = CulturalStory.query.filter_by(
-
-    title=story_title
-
-).first()
-
-
-
-if story:
-
-    return jsonify({
-
-        "title": story.title,
-
-        "description": story.description,
-
-        "category": story.category
-
-    })
-
-
-
-return jsonify({
-
-    "title": story_title,
-
-    "description": "추천 전래동화"
-
-})
-```
-
-# --------------------------------------------------
-
-# Lullaby Recommendation
-
-# --------------------------------------------------
-
-@app.route("/api/lullaby/[int:user_id](int:user_id)")
-
-def lullaby_recommendation(user_id):
-
-```
-user = User.query.get(user_id)
-
-
-
-if not user:
-
-    return jsonify({
-
-        "success": False
-
-    }), 404
-
-
-
-age = calculate_month_age(user.baby_birth)
-
-
-
-lullaby = Lullaby.query.first()
-
-
-
-if lullaby:
-
-    return jsonify({
-
-        "title": lullaby.title,
-
-        "description": lullaby.description,
-
-        "audio_url": lullaby.audio_url
-
-    })
-
-
-
-return jsonify({
-
-    "title": "섬집아기",
-
-    "description": "한국 전통 자장가"
-
-})
-```
-
-# --------------------------------------------------
-
-# Culture Events
-
-# --------------------------------------------------
-
-@app.route("/api/events")
-
-def cultural_events():
-
-```
-return jsonify({
-
-    "events": [
-
-        {
-
-            "title": "전통놀이 체험",
-
-            "location": "서울",
-
-            "date": "2026-07-01"
-
-        },
-
-        {
-
-            "title": "어린이 국악 공연",
-
-            "location": "부산",
-
-            "date": "2026-07-10"
-
-        }
-
-    ]
-
-})
-```
-
-# --------------------------------------------------
-
-# AI Culture Guide
-
-# --------------------------------------------------
-
-@app.route("/api/culture-guide")
-
-def culture_guide():
-
-```
-topic = request.args.get("topic")
-
-
-
-guides = {
-
-    "백일":
-
-    "백일은 아기의 건강과 장수를 기원하는 한국 전통 문화입니다.",
-
-
-
-    "돌잔치":
-
-    "돌잔치는 첫 생일을 기념하는 대표적인 한국 문화입니다.",
-
-
-
-    "추석":
-
-    "추석은 가족이 모여 조상을 기리고 음식을 나누는 명절입니다."
-
-}
-
-
-
-return jsonify({
-
-    "topic": topic,
-
-    "guide": guides.get(
-
-        topic,
-
-        "문화 정보를 준비 중입니다."
-
-    )
-
-})
-```
-
-# --------------------------------------------------
-
-# Seed Data
-
-# --------------------------------------------------
-
-def seed_data():
-
-```
-if CulturalStory.query.count() == 0:
-
-    stories = [
-
-        CulturalStory(
-
-            title="까치와 호랑이",
-
-            category="전래동화",
-
-            age_group="0-6",
-
-            description="용기와 지혜를 알려주는 이야기"
-
-        ),
-
-        CulturalStory(
-
-            title="흥부와 놀부",
-
-            category="전래동화",
-
-            age_group="6-12",
-
-            description="나눔과 형제애를 배우는 이야기"
-
-        ),
-
-        CulturalStory(
-
-            title="해님달님",
-
-            category="전래동화",
-
-            age_group="12-24",
-
-            description="가족애를 배우는 이야기"
-
-        ),
-
-        CulturalStory(
-
-            title="선녀와 나무꾼",
-
-            category="전래동화",
-
-            age_group="24-36",
-
-            description="상상력을 키워주는 이야기"
-
-        )
-
-    ]
-
-
-
-    db.session.add_all(stories)
-
-
-
-if Lullaby.query.count() == 0:
-
-    db.session.add(
-
-        Lullaby(
-
-            title="섬집아기",
-
-            description="한국 대표 자장가",
-
-            audio_url="https://sample.com/audio.mp3",
-
-            age_group="0-36"
-
-        )
-
-    )
-
-
-
-db.session.commit()
-```
-
-# --------------------------------------------------
-
-# Main
-
-# --------------------------------------------------
-
-if **name** == "**main**":
-
-```
-with app.app_context():
-
-    db.create_all()
-
-    seed_data()
-
-
-
-app.run(
-
-    host="0.0.0.0",
-
-    port=5000,
-
-    debug=True
-
-)
-```
+이를 통해 공공성과 시장성을 동시에 확보하며, 향후에는 한국형 육아 문화 데이터를 글로벌 K-패밀리 플랫폼으로 확장할 수 있는 높은 성장 잠재력을 가진 서비스로 발전할 수 있다.
 
 ### 개선하면 좋은 다음 단계
 
