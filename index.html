@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mamam Linker JS Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+    --bg:#08101d;
+    --panel:rgba(17,26,46,.84);
+    --line:rgba(255,255,255,.08);
+    --text:#edf3ff;
+    --muted:#a0b2d4;
+    --primary:#7c6cff;
+    --primary2:#35d2ff;
+    --success:#23d18b;
+    --shadow:0 20px 60px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+body{
+    margin:0;
+    background:radial-gradient(circle at top,#15213d 0,#08101d 55%,#04070d 100%);
+    color:var(--text);
+}
+.shell{
+    max-width:460px;
+    min-height:100vh;
+    margin:0 auto;
+    background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));
+    box-shadow:var(--shadow);
+}
+.top{
+    padding:22px 18px 16px;
+    background:linear-gradient(135deg,rgba(124,108,255,.24),rgba(53,210,255,.14));
+    border-bottom:1px solid var(--line);
+}
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:7px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,.05);
+    border:1px solid var(--line);
+    color:var(--muted);
+    font-size:12px;
+}
+.h1{
+    margin:14px 0 6px;
+    font-size:28px;
+    line-height:1.1;
+    font-weight:800;
+    letter-spacing:-.03em;
+}
+.sub{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+}
+.content{
+    padding:16px 14px 92px;
+}
+.card{
+    background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.025));
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:16px;
+    margin-bottom:14px;
+    backdrop-filter:blur(12px);
+}
+.sec{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:0 0 12px;
+    font-size:15px;
+    font-weight:700;
+}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.input,.select,.btn{
+    width:100%;
+    border-radius:16px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.05);
+    color:var(--text);
+    padding:13px 14px;
+    font-size:14px;
+    outline:none;
+}
+.input::placeholder{color:#8396ba}
+.btn{
+    background:linear-gradient(135deg,var(--primary),var(--primary2));
+    border:none;
+    color:#07111f;
+    font-weight:800;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+}
+.btn.secondary{
+    background:rgba(255,255,255,.06);
+    color:var(--text);
+    border:1px solid var(--line);
+}
+.pill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:7px 10px;
+    border-radius:999px;
+    background:rgba(255,255,255,.06);
+    border:1px solid var(--line);
+    color:var(--muted);
+    text-decoration:none;
+    font-size:12px;
+}
+.row{display:flex;gap:10px;align-items:center}
+.avatar{
+    width:48px;height:48px;border-radius:16px;
+    background:linear-gradient(135deg,var(--primary),var(--primary2));
+    color:#07111f;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;
+}
+.muted{color:var(--muted);font-size:12px;line-height:1.45}
+.timeline{display:flex;flex-direction:column;gap:10px}
+.timeline-item{
+    padding:14px;
+    border-radius:18px;
+    background:rgba(255,255,255,.03);
+    border:1px solid var(--line);
+}
+.k{
+    display:inline-flex;
+    padding:4px 8px;
+    border-radius:999px;
+    font-size:11px;
+    background:rgba(124,108,255,.14);
+    color:#d6d0ff;
+    margin-bottom:8px;
+}
+.k.health{background:rgba(35,209,139,.14);color:#9ef1c8}
+.k.support{background:rgba(53,210,255,.12);color:#a5eeff}
+.k.culture{background:rgba(255,202,92,.12);color:#ffe29b}
+.title{font-size:14px;font-weight:700;margin:0 0 6px}
+.desc{font-size:12px;color:var(--muted);line-height:1.5;margin:0}
+.split{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.nav{
+    position:fixed;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(460px,100%);
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    background:rgba(8,16,29,.92);
+    backdrop-filter:blur(18px);
+    border-top:1px solid var(--line);
+}
+.nav a{
+    padding:12px 6px;
+    text-align:center;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:11px;
+}
+.nav a b{
+    display:block;
+    margin-top:4px;
+    font-size:12px;
+    color:inherit;
+}
+.notice{
+    padding:12px 14px;
+    border-radius:16px;
+    background:rgba(35,209,139,.12);
+    border:1px solid rgba(35,209,139,.3);
+    color:#b9ffe0;
+    font-size:13px;
+    line-height:1.5;
+}
+.chat-box{
+    height:220px;
+    overflow:auto;
+    padding:10px;
+    border-radius:16px;
+    background:rgba(255,255,255,.03);
+    border:1px solid var(--line);
+}
+.chat-msg{
+    padding:10px 12px;
+    margin-bottom:8px;
+    border-radius:14px;
+    background:rgba(255,255,255,.05);
+}
+.chat-meta{font-size:11px;color:var(--muted);margin-bottom:4px}
+.chat-text{font-size:13px;line-height:1.45}
+.lang-chip{
+    display:inline-block;
+    padding:4px 8px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    color:var(--muted);
+    font-size:11px;
+    margin-right:6px;
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="top">
+    <div class="badge" id="badge">English default / Multilingual enabled</div>
+    <div class="h1" id="appTitle">Mamam Linker</div>
+    <div class="sub" id="appSubtitle">Multilingual parenting and jobs platform</div>
+  </div>
+
+  <div class="content">
+    <div class="card" id="top">
+      <div class="sec">Language</div>
+      <div class="grid">
+        <select class="select" id="uiLang" onchange="renderLanguage()">
+          <option value="en">English</option>
+          <option value="ko">한국어</option>
+          <option value="vi">Tiếng Việt</option>
+          <option value="zh">中文</option>
+          <option value="ph">Filipino</option>
+        </select>
+        <button class="btn secondary" onclick="saveState()">Apply</button>
+      </div>
+      <div class="muted" style="margin-top:10px" id="menuHelp">Menu links now jump to each section.</div>
+    </div>
+
+    <div class="card" id="profile">
+      <div class="sec" id="profileTitle">Profile</div>
+      <div id="profileArea"></div>
+    </div>
+
+    <div class="card" id="roadmap">
+      <div class="sec" id="roadmapTitle">My Roadmap</div>
+      <div class="timeline" id="roadmapList"></div>
+    </div>
+
+    <div class="card" id="spots">
+      <div class="sec" id="spotsTitle">Mamam Spot</div>
+      <div id="spotList"></div>
+    </div>
+
+    <div class="card" id="cast">
+      <div class="sec" id="castTitle">Mamam Cast</div>
+      <div class="grid">
+        <input class="input" id="hostName" placeholder="Guide name">
+        <select class="select" id="castLang">
+          <option value="en">English</option>
+          <option value="ko">한국어</option>
+          <option value="vi">Tiếng Việt</option>
+          <option value="zh">中文</option>
+          <option value="ph">Filipino</option>
+        </select>
+      </div>
+      <div style="height:10px"></div>
+      <button class="btn" onclick="startCast()">Start Session</button>
+      <div style="height:10px"></div>
+      <div id="castInfo"></div>
+    </div>
+
+    <div class="card" id="gov">
+      <div class="sec" id="govTitle">Gov Match</div>
+      <div id="govList"></div>
+    </div>
+
+    <div class="card" id="chat">
+      <div class="sec" id="chatTitle">Chat Menu</div>
+      <div class="muted" id="chatHint">Local chat is available now.</div>
+      <div style="height:10px"></div>
+      <div class="chat-box" id="chatBox"></div>
+      <div style="height:10px"></div>
+      <div class="grid">
+        <input class="input" id="nickname" placeholder="Your nickname" value="Guest">
+        <button class="btn secondary" onclick="joinChat()">Join</button>
+      </div>
+      <div style="height:10px"></div>
+      <div class="grid">
+        <input class="input" id="message" placeholder="Type a message">
+        <button class="btn" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <a class="btn" href="javascript:void(0)" onclick="translateDemo()">Google Translate Demo</a>
+      <div style="height:10px"></div>
+      <div id="translationArea"></div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <a href="#top"><b>Home</b>Top</a>
+    <a href="#roadmap"><b>Roadmap</b>Plan</a>
+    <a href="#spots"><b>Spot</b>Map</a>
+    <a href="#cast"><b>Cast</b>Live</a>
+    <a href="#chat"><b>Chat</b>Talk</a>
+  </div>
+</div>
+
+<script>
+const DEFAULT_STATE = {
+    lang: 'en',
+    child: null,
+    roadmap: [
+        {id: 1, title: 'BCG vaccination guidance', category: 'Health', month: 0, description: 'Show local vaccination schedule and nearest clinic.', active: true},
+        {id: 2, title: '100-day celebration customs', category: 'Culture', month: 3, description: 'Localized family tradition guide in the selected language.', active: true},
+        {id: 3, title: 'Infant health checkup', category: 'Health', month: 6, description: 'Recommended developmental checkup and follow-up reminders.', active: true},
+        {id: 4, title: 'Bilingual development track', category: 'Support', month: 12, description: 'Monthly bilingual story mission cards for the child.', active: false}
+    ],
+    spots: [
+        {id: 1, name: 'National Folk Museum', region: 'Seoul', radius_m: 100, audio_script: 'This is a historic cultural site.'},
+        {id: 2, name: 'Mapo Heritage Walk', region: 'Seoul', radius_m: 100, audio_script: 'A short story about local heritage.'}
+    ],
+    govs: [
+        {title: 'Childcare Support Voucher', description: 'Monthly childcare benefit for eligible families.', documents: 'ID, Family relation certificate', max_amount: 300000, hotline: '129'},
+        {title: 'Multicultural Family Center Program', description: 'Language and parenting support program.', documents: 'ID, Residence proof', max_amount: 0, hotline: '1577-1366'}
+    ],
+    chatMessages: [],
+    castSession: null,
+    translation: null
+};
+
+const TEXT = {
+    en: {title:'Mamam Linker', subtitle:'Multilingual parenting and jobs platform', badge:'English default / Multilingual enabled', profile:'Profile', roadmap:'My Roadmap', spots:'Mamam Spot', cast:'Mamam Cast', gov:'Gov Match', chat:'Chat Menu', register:'Save Profile', reset:'Reset Profile', apply:'Apply', start:'Start Session', remove:'Remove', add:'Add', language:'Language', child_name:'Child name', nationality:'Nationality', no_child:'Register a child profile to see personalized content.', no_gov:'Register a child profile to see matched government support.', translation:'Translation', menuHelp:'Menu links now jump to each section.', chatHint:'Local chat is available now.', send:'Send', join:'Join', translateDemo:'Google Translate Demo', startBtn:'Start Session'},
+    ko: {title:'마맘링커', subtitle:'다국어 육아·일자리 플랫폼', badge:'기본 언어 English / 다국어 지원', profile:'프로필', roadmap:'맞춤 로드맵', spots:'문화 스팟', cast:'로컬 미니 발표장', gov:'정부지원 매칭', chat:'채팅 메뉴', register:'프로필 저장', reset:'프로필 초기화', apply:'적용', start:'세션 시작', remove:'제거', add:'추가', language:'언어', child_name:'아이 이름', nationality:'국적', no_child:'자녀 프로필을 등록하면 맞춤 콘텐츠가 표시됩니다.', no_gov:'자녀 프로필을 등록하면 지원사업이 매칭됩니다.', translation:'번역', menuHelp:'메뉴 링크가 각 섹션으로 바로 이동합니다.', chatHint:'로컬 채팅을 사용할 수 있습니다.', send:'전송', join:'참여', translateDemo:'구글 번역 데모', startBtn:'세션 시작'},
+    vi: {title:'Mamam Linker', subtitle:'Nền tảng nuôi con và việc làm đa ngôn ngữ', badge:'English mặc định / hỗ trợ đa ngôn ngữ', profile:'Hồ sơ', roadmap:'Lộ trình của tôi', spots:'Mamam Spot', cast:'Mamam Cast', gov:'Gov Match', chat:'Chat Menu', register:'Lưu hồ sơ', reset:'Đặt lại hồ sơ', apply:'Áp dụng', start:'Bắt đầu phiên', remove:'Xóa', add:'Thêm', language:'Ngôn ngữ', child_name:'Tên bé', nationality:'Quốc tịch', no_child:'Đăng ký hồ sơ bé để xem nội dung cá nhân hóa.', no_gov:'Đăng ký hồ sơ bé để xem gói hỗ trợ phù hợp.', translation:'Bản dịch', menuHelp:'Liên kết menu sẽ nhảy đến từng mục.', chatHint:'Chat cục bộ hiện đã sẵn sàng.', send:'Gửi', join:'Tham gia', translateDemo:'Demo Google Translate', startBtn:'Bắt đầu phiên'},
+    zh: {title:'Mamam Linker', subtitle:'多语言育儿与就业平台', badge:'默认英语 / 支持多语言', profile:'资料', roadmap:'我的路线图', spots:'文化地点', cast:'本地小讲台', gov:'政府支持匹配', chat:'聊天菜单', register:'保存资料', reset:'重置资料', apply:'应用', start:'开始会话', remove:'删除', add:'添加', language:'语言', child_name:'孩子姓名', nationality:'国籍', no_child:'注册孩子资料后即可查看个性化内容。', no_gov:'注册孩子资料后即可查看匹配的政府支持。', translation:'翻译', menuHelp:'菜单链接可直接跳转到对应区域。', chatHint:'本地聊天现已可用。', send:'发送', join:'加入', translateDemo:'Google 翻译演示', startBtn:'开始会话'},
+    ph: {title:'Mamam Linker', subtitle:'Multilingual parenting at trabaho platform', badge:'English default / multilingual support', profile:'Profile', roadmap:'Aking Roadmap', spots:'Mamam Spot', cast:'Mamam Cast', gov:'Gov Match', chat:'Chat Menu', register:'I-save ang profile', reset:'I-reset ang profile', apply:'Apply', start:'Start Session', remove:'Remove', add:'Add', language:'Wika', child_name:'Pangalan ng bata', nationality:'Nasyonalidad', no_child:'Magrehistro ng profile ng bata para makita ang personalized content.', no_gov:'Magrehistro ng profile ng bata para makita ang tugmang tulong ng gobyerno.', translation:'Salin', menuHelp:'Ang menu links ay diretso sa bawat seksyon.', chatHint:'Available na ang local chat.', send:'Send', join:'Join', translateDemo:'Google Translate Demo', startBtn:'Start Session'}
+};
+
+let state = loadState();
+
+function loadState() {
+    const saved = localStorage.getItem('mamam_linker_state');
+    if (!saved) return structuredClone(DEFAULT_STATE);
+    try {
+        return {...structuredClone(DEFAULT_STATE), ...JSON.parse(saved)};
+    } catch {
+        return structuredClone(DEFAULT_STATE);
+    }
+}
+
+function saveState() {
+    localStorage.setItem('mamam_linker_state', JSON.stringify(state));
+    renderAll();
+}
+
+function getT() {
+    return TEXT[state.lang] || TEXT.en;
+}
+
+function renderLanguage() {
+    state.lang = document.getElementById('uiLang').value;
+    state.castLang = state.lang;
+    saveState();
+}
+
+function renderAll() {
+    const t = getT();
+    document.documentElement.lang = state.lang;
+    document.getElementById('appTitle').textContent = t.title;
+    document.getElementById('appSubtitle').textContent = t.subtitle;
+    document.getElementById('badge').textContent = t.badge;
+    document.getElementById('profileTitle').textContent = t.profile;
+    document.getElementById('roadmapTitle').textContent = t.roadmap;
+    document.getElementById('spotsTitle').textContent = t.spots;
+    document.getElementById('castTitle').textContent = t.cast;
+    document.getElementById('govTitle').textContent = t.gov;
+    document.getElementById('chatTitle').textContent = t.chat;
+    document.getElementById('menuHelp').textContent = t.menuHelp;
+    document.getElementById('chatHint').textContent = t.chatHint;
+    document.getElementById('uiLang').value = state.lang;
+
+    renderProfile();
+    renderRoadmap();
+    renderSpots();
+    renderGov();
+    renderChat();
+    renderCast();
+    renderTranslation();
+}
+
+function renderProfile() {
+    const t = getT();
+    const el = document.getElementById('profileArea');
+    if (state.child) {
+        el.innerHTML = `
+            <div class="row">
+                <div class="avatar">${state.child.name.charAt(0).toUpperCase()}</div>
+                <div style="flex:1">
+                    <div style="font-weight:700">${escapeHtml(state.child.name)} · ${state.child.age_months || 0}m</div>
+                    <div class="muted">${escapeHtml(state.child.region)} · ${escapeHtml(state.child.language)} · ${escapeHtml(state.child.nationality)}</div>
+                </div>
+                <a class="pill" href="javascript:void(0)" onclick="clearProfile()">${t.reset}</a>
+            </div>
+        `;
+    } else {
+        el.innerHTML = `
+            <div class="grid">
+                <input class="input" id="childName" placeholder="${t.child_name}">
+                <input class="input" id="birthDate" type="date">
+            </div>
+            <div style="height:10px"></div>
+            <div class="grid">
+                <select class="select" id="region">
+                    <option>Seoul</option><option>Busan</option><option>Incheon</option><option>Gyeonggi</option>
+                </select>
+                <input class="input" id="nationality" placeholder="${t.nationality}" value="Korea">
+            </div>
+            <div style="height:10px"></div>
+            <select class="select" id="childLang">
+                <option value="en">English</option>
+                <option value="ko">한국어</option>
+                <option value="vi">Tiếng Việt</option>
+                <option value="zh">中文</option>
+                <option value="ph">Filipino</option>
+            </select>
+            <div style="height:10px"></div>
+            <button class="btn" onclick="saveProfile()">${t.register}</button>
+        `;
+        document.getElementById('childLang').value = 'en';
+    }
+}
+
+function renderRoadmap() {
+    const t = getT();
+    const list = document.getElementById('roadmapList');
+    list.innerHTML = state.roadmap.map(item => `
+        <div class="timeline-item">
+            <div class="k ${item.category.toLowerCase()}">${item.category}</div>
+            <div class="title">[${item.month}m] ${escapeHtml(item.title)}</div>
+            <p class="desc">${escapeHtml(item.description)}</p>
+            <div style="display:flex;gap:8px;margin-top:10px">
+                <a class="pill" href="javascript:void(0)" onclick="toggleRoadmap(${item.id})">${item.active ? t.remove : t.add}</a>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderSpots() {
+    const list = document.getElementById('spotList');
+    list.innerHTML = state.spots.map(s => `
+        <div class="timeline-item" style="margin-bottom:10px">
+            <div class="split">
+                <div>
+                    <div class="title">${escapeHtml(s.name)}</div>
+                    <div class="muted">${escapeHtml(s.region)} · ${s.radius_m}m</div>
+                </div>
+                <a class="pill" href="javascript:void(0)" onclick="alert('${escapeJs(s.audio_script)}')">AR</a>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderGov() {
+    const t = getT();
+    const list = document.getElementById('govList');
+    if (!state.child) {
+        list.innerHTML = `<div class="muted">${t.no_gov}</div>`;
+        return;
+    }
+    list.innerHTML = state.govs.map(g => `
+        <div class="timeline-item" style="margin-bottom:10px">
+            <div class="title">${escapeHtml(g.title)}</div>
+            <div class="muted">${escapeHtml(g.description)}</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+                <span class="pill">${g.max_amount} KRW</span>
+                <span class="pill">${escapeHtml(g.documents)}</span>
+                <span class="pill">${escapeHtml(g.hotline)}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderCast() {
+    const el = document.getElementById('castInfo');
+    if (state.castSession) {
+        el.innerHTML = `<div class="notice">Session ${escapeHtml(state.castSession.session_code)} · ${state.castSession.attendee_count} attendees</div>`;
+    } else {
+        el.innerHTML = '';
+    }
+}
+
+function renderChat() {
+    const box = document.getElementById('chatBox');
+    box.innerHTML = state.chatMessages.map(msg => `
+        <div class="chat-msg">
+            <div class="chat-meta">${escapeHtml(msg.created_at)} · ${escapeHtml(msg.nickname)}</div>
+            <div class="chat-text">${escapeHtml(msg.message)}</div>
+        </div>
+    `).join('');
+    box.scrollTop = box.scrollHeight;
+}
+
+function renderTranslation() {
+    const el = document.getElementById('translationArea');
+    if (!state.translation) {
+        el.innerHTML = '';
+        return;
+    }
+    el.innerHTML = `
+        <div class="timeline-item">
+            <div class="title">${escapeHtml(state.translation.source)}</div>
+            <p class="desc">${escapeHtml(state.translation.translation)}</p>
+            <div class="muted" style="margin-top:8px">${escapeHtml(state.translation.note)}</div>
+        </div>
+    `;
+}
+
+function saveProfile() {
+    const name = document.getElementById('childName').value.trim();
+    const birthDate = document.getElementById('birthDate').value;
+    const region = document.getElementById('region').value;
+    const nationality = document.getElementById('nationality').value.trim();
+    const language = document.getElementById('childLang').value;
+
+    if (!name || !birthDate) {
+        alert('Please fill child name and birth date.');
+        return;
+    }
+
+    state.child = {
+        name, birthDate, region, nationality, language,
+        age_months: calcMonths(birthDate)
+    };
+    saveState();
+}
+
+function clearProfile() {
+    state.child = null;
+    saveState();
+}
+
+function toggleRoadmap(id) {
+    const item = state.roadmap.find(x => x.id === id);
+    if (item) item.active = !item.active;
+    saveState();
+}
+
+function startCast() {
+    const hostName = document.getElementById('hostName').value.trim() || 'Guide';
+    const profileLang = document.getElementById('castLang').value;
+    const code = 'CS' + new Date().toISOString().replace(/\D/g, '').slice(0,14);
+    state.castSession = { session_code: code, host_name: hostName, profile_lang: profileLang, attendee_count: 1, status: 'live' };
+    saveState();
+}
+
+function joinChat() {
+    const nickname = document.getElementById('nickname').value.trim() || 'Guest';
+    state.chatNickname = nickname;
+    saveState();
+    alert('Chat joined as ' + nickname);
+}
+
+function sendMessage() {
+    const nickname = document.getElementById('nickname').value.trim() || state.chatNickname || 'Guest';
+    const message = document.getElementById('message').value.trim();
+    if (!message) return;
+    const created_at = new Date().toLocaleString();
+    state.chatMessages.push({nickname, message, created_at});
+    document.getElementById('message').value = '';
+    saveState();
+}
+
+function translateDemo() {
+    const map = {
+        en: {source:'Welcome to Mamam Linker', translation:'Welcome to Mamam Linker', note:'Demo translation shown in English.'},
+        ko: {source:'Welcome to Mamam Linker', translation:'마맘링커에 오신 것을 환영합니다.', note:'구글 번역 API를 연결하면 실제 번역으로 대체됩니다.'},
+        vi: {source:'Welcome to Mamam Linker', translation:'Chào mừng bạn đến với Mamam Linker', note:'Demo translation.'},
+        zh: {source:'Welcome to Mamam Linker', translation:'欢迎来到 Mamam Linker', note:'Demo translation.'},
+        ph: {source:'Welcome to Mamam Linker', translation:'Maligayang pagdating sa Mamam Linker', note:'Demo translation.'}
+    };
+    state.translation = map[state.lang] || map.en;
+    saveState();
+}
+
+function calcMonths(birthDate) {
+    const b = new Date(birthDate);
+    const now = new Date();
+    let months = (now.getFullYear() - b.getFullYear()) * 12 + (now.getMonth() - b.getMonth());
+    if (now.getDate() < b.getDate()) months--;
+    return Math.max(months, 0);
+}
+
+function escapeHtml(str) {
+    return String(str).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeJs(str) {
+    return String(str).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"');
+}
+
+document.getElementById('uiLang').value = state.lang;
+renderAll();
+</script>
+</body>
+</html>
