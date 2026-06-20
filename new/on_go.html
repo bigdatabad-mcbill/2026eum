@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>온고지신 (On-Go) MVP</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 한국적 감성의 단청/전통 색상 커스텀 스타일 정의 */
+        :root {
+            --primary-color: #2C5E57; /* 은은한 단청 옥색 */
+            --secondary-color: #D96B62; /* 따뜻한 연지색 */
+            --bg-color: #F9F8F6; /* 한지 느낌의 미색 */
+        }
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: #e5e5e5;
+        }
+        .app-container {
+            max-width: 420px;
+            height: 100vh;
+            background-color: var(--bg-color);
+        }
+        /* 스크롤바 숨기기 */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="flex justify-center items-center">
+
+    <div class="app-container w-full relative flex flex-col shadow-2xl overflow-hidden border-x border-gray-200">
+        
+        <header class="flex justify-between items-center px-4 py-3 bg-white border-b border-gray-100 shrink-0">
+            <h1 class="text-xl font-bold tracking-wide" style="color: #2C5E57;">온고지신 <span class="text-xs font-normal text-gray-500">On-Go</span></h1>
+            <div class="flex gap-4 text-xl text-gray-700">
+                <i class="fa-regular fa-heart cursor-pointer hover:text-red-500"></i>
+                <i class="fa-regular fa-paper-plane cursor-pointer"></i>
+            </div>
+        </header>
+
+        <main id="main-content" class="flex-1 overflow-y-auto pb-20 no-scrollbar">
+            
+            <section class="p-3 bg-white border-b border-gray-100">
+                <div class="flex gap-4 overflow-x-auto no-scrollbar py-1">
+                    <div class="flex flex-col items-center shrink-0 cursor-pointer" onclick="showAlert('김순희 전문가님의 실시간 경복궁 랜선 투어로 이동합니다.')">
+                        <div class="w-16 h-16 rounded-full p-[2px] bg-gradient-to-tr from-amber-500 to-emerald-600">
+                            <div class="w-full h-full bg-white rounded-full p-[2px]">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150" class="w-full h-full object-cover rounded-full" alt="시니어">
+                            </div>
+                        </div>
+                        <span class="text-xs mt-1 text-gray-600 font-medium">김순희(역사)</span>
+                    </div>
+                    <div class="flex flex-col items-center shrink-0 cursor-pointer" onclick="showAlert('이종학 전문가님의 전래동요 교실로 이동합니다.')">
+                        <div class="w-16 h-16 rounded-full p-[2px] bg-gradient-to-tr from-amber-500 to-emerald-600">
+                            <div class="w-full h-full bg-white rounded-full p-[2px]">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" class="w-full h-full object-cover rounded-full" alt="시니어">
+                            </div>
+                        </div>
+                        <span class="text-xs mt-1 text-gray-600 font-medium">이종학(민속)</span>
+                    </div>
+                    <div class="flex flex-col items-center shrink-0 cursor-pointer" onclick="showAlert('국립중앙박물관 어린이 박물관 특강 페이지로 연계됩니다.')">
+                        <div class="w-16 h-16 rounded-full p-[2px] bg-gray-300">
+                            <div class="w-full h-full bg-white rounded-full p-[2px]">
+                                <div class="w-full h-full bg-emerald-100 rounded-full flex items-center justify-center text-emerald-800 font-bold text-xs">박물관</div>
+                            </div>
+                        </div>
+                        <span class="text-xs mt-1 text-gray-600 font-medium">중앙박물관</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="p-4">
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-gray-800 mb-3"><i class="fa-solid fa-map-marked-alt mr-2 text-emerald-700"></i>우리아이 K-문화 육아 로드맵</h3>
+                    
+                    <div class="flex border-b border-gray-200 text-sm mb-4">
+                        <button onclick="switchRoadmap('baby')" id="tab-baby" class="flex-1 pb-2 text-center font-bold border-b-2 border-emerald-700 text-emerald-700">0-3세 (말문)</button>
+                        <button onclick="switchRoadmap('child')" id="tab-child" class="flex-1 pb-2 text-center text-gray-400">4-7세 (오감)</button>
+                        <button onclick="switchRoadmap('junior')" id="tab-junior" class="flex-1 pb-2 text-center text-gray-400">8-13세 (교과)</button>
+                    </div>
+
+                    <div id="roadmap-content" class="bg-stone-50 p-3 rounded-xl border border-stone-200/60 text-sm text-gray-700 min-h-[90px]">
+                        <p class="font-semibold text-emerald-800 mb-1">📢 [0-3세] 말문이 트이는 우리 소리</p>
+                        <p class="text-xs text-gray-500 mb-2">전래동요와 구전설화를 통한 정서 교감 및 한국어 첫걸음</p>
+                        <span class="inline-block bg-white text-xs px-2 py-1 rounded border text-stone-600">추천 서비스: 단동십훈 구연 홈케어</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="feed-container" class="space-y-4">
+                <div class="bg-white border-y border-gray-100">
+                    <div class="flex items-center justify-between p-3">
+                        <div class="flex items-center gap-3">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150" class="w-10 h-10 object-cover rounded-full" alt="프로필">
+                            <div>
+                                <p class="text-sm font-bold text-gray-800">김순희 전문가 <span class="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded ml-1">역사정교사 은퇴</span></p>
+                                <p class="text-xs text-gray-500">서울 종로구 · 활동 12회</p>
+                            </div>
+                        </div>
+                        <button onclick="openMatchingModal('김순희')" class="text-xs bg-emerald-700 text-white px-3 py-1.5 rounded-full font-medium hover:bg-emerald-800 transition">매칭 신청</button>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1612457811985-71bbd7fdf008?w=500" class="w-full h-64 object-cover" alt="피드이미지">
+                    <div class="p-3">
+                        <p class="text-sm text-gray-800"><span class="font-bold mr-2">@history_soonhee</span>다문화 가정을 위한 재미있는 고궁 투어! 다음 주말에는 아이들과 함께 세종대왕의 한글 창제 이야기를 경복궁에서 직접 들려줄 예정입니다. ❤️</p>
+                        <p class="text-xs text-gray-400 mt-2">댓글 4개 모두 보기</p>
+                    </div>
+                </div>
+
+                <div class="bg-white border-y border-gray-100">
+                    <div class="flex items-center justify-between p-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center font-bold text-xs">공공</div>
+                            <div>
+                                <p class="text-sm font-bold text-gray-800">내 주변 공공 문화 API 연계 서비스</p>
+                                <p class="text-xs text-emerald-700"><i class="fa-solid fa-location-dot mr-1"></i>현재 내 반경 5km 추천 정보</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-3 pb-3">
+                        <div class="bg-amber-50/50 border border-amber-200/70 rounded-xl p-3 space-y-2">
+                            <div class="flex justify-between items-center text-xs border-b border-amber-200 pb-1.5">
+                                <span class="font-bold text-amber-900"><i class="fa-solid fa-building-columns mr-1"></i>국립고궁박물관 어린이 주말 교실</span>
+                                <span class="text-emerald-700 bg-white px-2 py-0.5 rounded border border-emerald-100">잔여 4석</span>
+                            </div>
+                            <p class="text-xs text-gray-600">다문화 가정을 위한 역사 도슨트 동반 입장 시 입장료 50% 할인 혜택 자동 연계 가능</p>
+                            <button onclick="showAlert('공공 API 연동을 통해 즉시 예약 페이지로 이동합니다.')" class="w-full text-center text-xs py-2 bg-white border border-amber-300 rounded-lg text-amber-800 font-bold hover:bg-amber-100/50 transition">공공 혜택 적용하여 예약하기</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <nav class="absolute bottom-0 left-0 right-0 h-16 bg-white border-t border-gray-200 flex justify-around items-center text-xl text-gray-600 z-10">
+            <button onclick="changeTab('home')" class="flex flex-col items-center text-emerald-700"><i class="fa-solid fa-house"></i><span class="text-[10px] mt-0.5">홈</span></button>
+            <button onclick="changeTab('map')" class="flex flex-col items-center hover:text-emerald-700"><i class="fa-solid fa-compass"></i><span class="text-[10px] mt-0.5">문화지도</span></button>
+            <button onclick="changeTab('chat')" class="flex flex-col items-center hover:text-emerald-700"><i class="fa-solid fa-comment-dots"></i><span class="text-[10px] mt-0.5">메시지</span></button>
+            <button onclick="changeTab('mypage')" class="flex flex-col items-center hover:text-emerald-700"><i class="fa-solid fa-user"></i><span class="text-[10px] mt-0.5">마이</span></button>
+        </nav>
+
+        <div id="matching-modal" class="hidden absolute inset-0 bg-black/50 z-50 flex justify-center items-end animate-fade-in">
+            <div class="bg-white w-full rounded-t-2xl p-5 space-y-4 shadow-xl transform transition-transform duration-300">
+                <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto"></div>
+                <h4 class="text-lg font-bold text-gray-800"><span id="modal-senior-name" class="text-emerald-800"></span> 전문가 매칭 신청</h4>
+                <p class="text-sm text-gray-600">선택하신 역사 로드맵 기반의 맞춤 육아 및 한국어 교육 가이드라인이 전문가에게 안전하게 전달됩니다.</p>
+                <div class="bg-stone-50 p-3 rounded-lg text-xs space-y-1">
+                    <p>✔️ <strong>안심 보증 완료:</strong> 신원 확인 및 역사 교육 경력 인증</p>
+                    <p>✔️ <strong>다문화 우대 혜택:</strong> 매칭 보조금 자동 적용 구간</p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="closeMatchingModal()" class="flex-1 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium text-sm">취소</button>
+                    <button onclick="confirmMatching()" class="flex-1 py-3 bg-emerald-700 text-white rounded-xl font-bold text-sm">최종 신청 완료</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 나이별 로드맵 데이터셋 데이터베이스 시뮬레이션
+        const roadmapData = {
+            baby: {
+                title: "📢 [0-3세] 말문이 트이는 우리 소리",
+                desc: "전래동요와 구전설화를 통한 자연스러운 정서 교감 및 한국어 첫걸음 발달 자극 교육.",
+                tag: "추천 서비스: 단동십훈 구연 홈케어"
+            },
+            child: {
+                title: "📢 [4-7세] 오감으로 배우는 한국의 미",
+                desc: "우리 동네 유아 정원에서 시니어와 함께하는 전통 놀이(윷놀이, 제기차기) 및 전통 세시풍속 체험.",
+                tag: "추천 서비스: 소그룹 전통놀이 매칭"
+            },
+            junior: {
+                title: "📢 [8-13세] 교과서가 살아있는 역사 탐험",
+                desc: "초등 교과 맞춤형 삼국시대~근현대사 주요 유적지 및 박물관 동행 밀착 도슨트 가이드 육아.",
+                tag: "추천 서비스: 주말 박물관 탐험대 매칭"
+            }
+        };
+
+        // 로드맵 탭 전환 함수
+        function switchRoadmap(type) {
+            const contentDiv = document.getElementById('roadmap-content');
+            const data = roadmapData[type];
+            
+            // 콘텐츠 업데이트
+            contentDiv.innerHTML = `
+                <p class="font-semibold text-emerald-800 mb-1">${data.title}</p>
+                <p class="text-xs text-gray-500 mb-2">${data.desc}</p>
+                <span class="inline-block bg-white text-xs px-2 py-1 rounded border text-stone-600">${data.tag}</span>
+            `;
+
+            // 탭 스타일 활성화 토글
+            ['baby', 'child', 'junior'].forEach(id => {
+                const btn = document.getElementById(`tab-${id}`);
+                if (id === type) {
+                    btn.className = "flex-1 pb-2 text-center font-bold border-b-2 border-emerald-700 text-emerald-700";
+                } else {
+                    btn.className = "flex-1 pb-2 text-center text-gray-400";
+                }
+            });
+        }
+
+        // 매칭 모달 열기/닫기 인터랙션
+        function openMatchingModal(name) {
+            document.getElementById('modal-senior-name').innerText = name;
+            document.getElementById('matching-modal').classList.remove('hidden');
+        }
+
+        function closeMatchingModal() {
+            document.getElementById('matching-modal').classList.add('hidden');
+        }
+
+        function confirmMatching() {
+            alert("🎉 매칭 신청이 정상 접수되었습니다! 담당 시니어 전문가가 24시간 이내에 메시지로 연락드립니다.");
+            closeMatchingModal();
+        }
+
+        // 글로벌 네비게이션 탭 알림용 간이 함수
+        function changeTab(tabName) {
+            if(tabName === 'home') return;
+            alert(`'${tabName}' 탭은 MVP 개발 범위 외 영역입니다. 실제 개발 단계에서 공공데이터 OpenAPI 허브와 연동될 예정입니다.`);
+        }
+
+        function showAlert(msg) {
+            alert(msg);
+        }
+    </script>
+</body>
+</html>
