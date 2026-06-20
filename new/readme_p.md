@@ -433,4 +433,181 @@ render();
 
 원하시면 다음 단계로 바로 이어서 **이 MVP를 더 예쁘게 다듬은 인스타그램 스타일 UI 버전**과 **시니어 매칭 로직이 들어간 확장판**까지 만들어드리겠습니다.
 
+좋습니다. 이번에는 **React 전환 + 인스타그램 스타일 UI + 실제 매칭 로직 + 자동 예약 기능 + 6세 이상 패러독스 확장**까지 한 번에 들어간 설계로 드리겠습니다. 다문화가정 지원센터는 실제로 언어교육, 상담, 통번역, 양육 지원, 연령별 아동 지원을 제공하므로, 이 앱도 그런 공공 서비스 흐름에 맞춰 **예약-매칭-실행**이 이어지게 설계하는 것이 맞습니다. [goesan.go](https://www.goesan.go.kr/eng/contents.do?key=1332)
+
+## 전환 방향
+
+HTML 단일 페이지에서 React로 바꾸면, 화면을 **컴포넌트 단위**로 나누어 관리할 수 있습니다. 특히 인스타그램 스타일 피드형 UI, 카드 기반 추천, 예약 모달, 멘토 프로필, 로드맵 진행률을 각각 독립 컴포넌트로 분리하면 유지보수가 쉬워집니다. localStorage 같은 브라우저 저장은 React에서도 흔히 `useEffect`와 상태 관리로 처리합니다. [codingeasypeasy](https://www.codingeasypeasy.com/blog/mastering-localstorage-in-react-a-comprehensive-guide-with-code-examples)
+
+### React 구조
+- `App`
+- `Header`
+- `StoryFeed`
+- `RoadmapBoard`
+- `AgeSelector`
+- `MentorMatchList`
+- `BookingModal`
+- `CultureMap`
+- `MyFamily`
+
+## UI 고도화
+
+인스타그램 스타일은 “사진 같은 카드, 짧은 텍스트, 높은 몰입감”이 핵심입니다. 그래서 첫 화면은 긴 설명보다 **스토리 카드 피드**로 두고, 각 카드는 “오늘의 한 걸음”, “추천 멘토”, “주변 문화 장소”, “예약 가능 시간”을 보여주는 방식이 좋습니다. 카드형 레이아웃과 그리드형 반응형 구조는 React에서 가장 잘 구현됩니다. [youtube](https://www.youtube.com/watch?v=wc4jFStaR2c)
+
+### 화면 톤
+- 상단은 감성적인 헤더.
+- 중앙은 카드형 피드.
+- 하단은 빠른 액션 버튼.
+- 색상은 핑크, 보라, 네이비 계열의 소셜 피드 느낌.
+- 아동 대상이라도 과도하게 유아틱하지 않고 신뢰감 있게 구성.
+
+## 실제 매칭 로직
+
+실제 데이터 연결 로직은 “좋아 보이는 추천”이 아니라 **규칙 기반 + 점수 기반**으로 시작하는 것이 현실적입니다. 예를 들어, 아동 연령, 언어, 지역, 관심사, 부모 요청, 시니어 전문 분야를 점수화해서 가장 적합한 멘토를 선택합니다. 다문화가족지원센터가 실제로 언어교육, 통번역, 상담, 아동 언어발달 지원을 제공하므로, 이 로직도 그러한 항목을 우선 매칭 기준으로 사용하면 좋습니다. [mk.co](https://www.mk.co.kr/en/society/11289040)
+
+### 매칭 기준
+- 연령 적합도.
+- 언어 적합도.
+- 분야 적합도.
+- 거리 적합도.
+- 예약 가능 시간.
+- 부모 선호 태그.
+
+### 점수 예시
+- 연령 일치: 30점.
+- 언어 일치: 25점.
+- 분야 일치: 20점.
+- 지역 일치: 15점.
+- 일정 가능: 10점.
+
+## 패러독스 확장
+
+패러독스를 더 세분화하려면, 연령대별로 **집 안 실행 / 외부 실행 / 멘토 실행 / 기록 실행**의 4단 구조를 두는 것이 좋습니다. 특히 6세 이상은 단순 생활습관보다 “질문-탐색-기록-발표” 구조가 잘 맞습니다. 공공 문화정보와 다국어 생활정보를 함께 엮으면, 문화 체험이 일회성 이벤트가 아니라 꾸준한 학습 루틴이 됩니다. [mk.co](https://www.mk.co.kr/en/society/11289040)
+
+### 3-5세 패러독스
+- 집: 짧은 대화, 그림책, 정리 습관.
+- 외부: 도서관, 전통시장, 박물관.
+- 멘토: 이야기 듣기, 질문 놀이.
+- 기록: 스티커, 사진, 음성 메모.
+
+### 6-8세 패러독스
+- 집: 오늘의 역사 한 줄.
+- 외부: 동네 유적지, 가족센터 체험.
+- 멘토: 미션 퀴즈, 설명 훈련.
+- 기록: 3줄 일기, 지도 표시.
+
+### 9세 이상 패러독스
+- 집: 가족 역사 인터뷰.
+- 외부: 지역 아카이브, 문화 행사.
+- 멘토: 발표 피드백, 프로젝트 지도.
+- 기록: 포트폴리오와 성장 노트.
+
+## 자동 예약 기능
+
+자동 예약은 “멘토 추천 후 즉시 시간 제안” 방식이 가장 좋습니다. 사용자가 원하는 날짜를 고르면, 멘토의 가능한 시간 중 가장 가까운 슬롯을 제안하고, 승인 시 예약이 생성되도록 합니다. 실제 운영에서는 가족센터 상담이나 통번역 지원처럼 예약 중심 흐름이 이미 존재하므로, 이 앱도 그 흐름과 자연스럽게 맞물리게 설계해야 합니다. [goesan.go](https://www.goesan.go.kr/eng/contents.do?key=1332)
+
+### 예약 플로우
+1. 아이 정보 입력.
+2. 멘토 추천.
+3. 가능한 시간 표시.
+4. 부모가 시간 선택.
+5. 예약 확정.
+6. 캘린더와 알림 저장.
+
+### 예약 데이터 예시
+```json
+{
+  "familyName": "김가정",
+  "childAge": 5,
+  "mentorId": "mentor_102",
+  "serviceType": "역사 스토리 멘토링",
+  "date": "2026-06-24",
+  "time": "15:00",
+  "status": "confirmed"
+}
+```
+
+## React 예시 구조
+
+아래처럼 시작하면 됩니다. 이건 실제 개발 방향의 뼈대입니다. `useState`, `useEffect`, `localStorage` 기반으로 구현하고, 예약은 모달과 상태로 처리합니다. [youtube](https://www.youtube.com/watch?v=Fe4_a481WAs)
+
+```jsx
+function App() {
+  const [profile, setProfile] = useState({ name: "", age: 3, lang: "", interest: "" });
+  const [roadmaps, setRoadmaps] = useState([]);
+  const [mentors, setMentors] = useState([]);
+  const [booking, setBooking] = useState(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("mvp");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      setProfile(parsed.profile || profile);
+      setRoadmaps(parsed.roadmaps || []);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("mvp", JSON.stringify({ profile, roadmaps }));
+  }, [profile, roadmaps]);
+
+  return (
+    <div className="app">
+      <Header />
+      <StoryFeed />
+      <AgeSelector profile={profile} setProfile={setProfile} />
+      <RoadmapBoard roadmaps={roadmaps} setRoadmaps={setRoadmaps} />
+      <MentorMatchList profile={profile} mentors={mentors} onBook={setBooking} />
+      {booking && <BookingModal booking={booking} onClose={() => setBooking(null)} />}
+    </div>
+  );
+}
+```
+
+## 데이터 연결 방식
+
+실제 데이터 연결은 처음부터 대형 DB보다 **작은 JSON 파일 + API mock + 점진적 확장**이 좋습니다. 멘토 데이터는 이름, 전문분야, 가능시간, 언어, 지역, 인증 상태를 갖고 있어야 하고, 문화 장소 데이터는 연령 적합도, 소요 시간, 언어 지원, 예약 가능 여부를 가져야 합니다. 서울에서 시작한다면 가족센터, 박물관, 도서관, 전통문화기관 같은 오프라인 자원을 우선 연결하면 좋습니다. [goesan.go](https://www.goesan.go.kr/eng/contents.do?key=1332)
+
+### 멘토 데이터 필드
+- id.
+- name.
+- specialty.
+- language.
+- area.
+- availableSlots.
+- verified.
+- rating.
+
+### 문화 서비스 데이터 필드
+- id.
+- placeName.
+- ageGroup.
+- category.
+- languageSupport.
+- bookingRequired.
+- distance.
+- contentType.
+
+## 실행 우선순위
+
+이 프로젝트는 기능이 많아 보이지만, 실제 MVP에서는 순서를 잡아야 합니다. 먼저 React UI와 프로필 입력, 로드맵 생성, 멘토 추천을 만들고, 그다음 자동 예약을 붙이는 방식이 가장 안전합니다. 그 다음에 지역 서비스 연동과 지도, 알림, 다국어를 확장하면 됩니다. [pageflows](https://pageflows.com/resources/exploring-calendar-design/)
+
+### 1차
+- React 전환.
+- 인스타그램 스타일 피드.
+- 3-5세 로드맵.
+- 시니어 매칭.
+
+### 2차
+- 예약 기능.
+- 6세 이상 패러독스.
+- 지역 문화 서비스 연결.
+
+### 3차
+- 다국어.
+- 알림.
+- 데이터 대시보드.
+
+원하시면 다음 답변에서 바로 **React 프로젝트 폴더 구조 + 실제 컴포넌트 코드 + 멘토 추천 알고리즘 + 예약 모달 코드**까지 한 번에 작성해드리겠습니다.
+
 
